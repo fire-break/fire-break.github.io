@@ -1,15 +1,15 @@
 ---
-title: "How to Install Outline Server with WebSocket and Nginx on Debia"
+title: "How to Install Outline Server with WebSocket on Debian"
 layout: default 
 ---
 
-### **How to Install Outline Server with WebSocket and Nginx on Debian**
+### **How to Install Outline Server with WebSocket on Debian**
 
 This tutorial will guide you through setting up the `outline-ss-server` to listen for WebSocket connections on a private port and using Nginx to proxy public traffic from port 443 to the service. This setup enhances security and allows you to run other web services on the same server.
 
 #### **Prerequisites**
 
-1.  **A Debian Server**: A fresh installation of Debian 11 or 12 is recommended.
+1.  **A Debian Server**: A fresh installation of Debian 11 or 12 is recommended. (Ubuntu 22.04, 24.04, or later versions also work.)
 2.  **A Domain Name**: A domain (e.g., `your.domain.com`) with its A/AAAA record pointing to your server's public IP address.
 3.  **Sudo User Access**: You must be able to log in and execute commands as a user with `sudo` privileges.
 4.  **Required Packages**: Install Nginx and Certbot.
