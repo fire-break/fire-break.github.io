@@ -425,7 +425,7 @@ This is the most common error. The path in your Nginx configuration must **exact
 
 This is the second most common error. The port Nginx proxies to must be the same one your `outline-ss-server` is listening on.
 
-*   **Symptoms**: The client will time out. In the Nginx error log (`/var/log/nginx/error.log`), you will see errors like `connect() failed (111: Connection refused) while connecting to upstream`. This means Nginx is trying to forward the traffic, but no service is listening at the target address.
+*   **Symptoms**: Your client will immediately fail to connect. In the Nginx error log (`/var/log/nginx/error.log`), you will see errors like `connect() failed (111: Connection refused) while connecting to upstream`. This means Nginx is trying to forward the traffic, but no service is listening at the target address.
 
 *   **How to Fix**:
     1.  **Check your Outline config**:
@@ -465,7 +465,7 @@ If you are using a firewall on your server (like `ufw`), you must explicitly all
 
 A simple copy-paste error in the client's YAML configuration file can also cause issues.
 
-*   **Symptoms**: The client might connect but immediately disconnect, or it might show an authentication error.
+*   **Symptoms**: Your client will immediately disconnect.
 
 *   **How to Fix**:
     1.  **Double-check the secret**: Ensure the `secret:` value in your server's `config.yaml` is the exact same one used in the client's `outline-config.yaml`.
