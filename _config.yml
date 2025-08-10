@@ -15,3 +15,9 @@ remote_theme: pages-themes/minimal@v0.2.0
 plugins:
   - jekyll-feed # 为你的网站生成一个 RSS feed
   - jekyll-remote-theme
+
+collections:
+  tutorials:  # define a collection named "tutorials"
+    output: true # generate a seperate page for each of the docs in this collection
+  reports:    #  define a collection named "reports" 
+    output: true
