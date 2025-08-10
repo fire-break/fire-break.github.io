@@ -1,0 +1,17 @@
+# _config.yml
+
+# site basic info
+title: Firebreak
+author: 
+description: >- # web description
+  Firebreak provides you with essential toolkits and guides to protect your online privacy.
+url: "https://fire-break.github.io" # site URL
+
+# theme settings
+#theme: jekyll-theme-minimal # this is an example
+remote_theme: pages-themes/minimal@v0.2.0
+
+# plugins (optional)
+plugins:
+  - jekyll-feed # 为你的网站生成一个 RSS feed
+  - jekyll-remote-theme
