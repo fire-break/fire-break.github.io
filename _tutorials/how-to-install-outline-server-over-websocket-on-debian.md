@@ -221,30 +221,66 @@ If you prefer not to host this file on your Outline server, you can use any serv
     sudo nano /var/www/html/outline-config.yaml
     ```
 
-2.  **Paste the Client Configuration**:
-    This format is specifically for the Outline client. **Replace `your.domain.com` with your domain and `xYzc2vR+aB1eF5gHjK9LqQ==` with your secret.**
+**2. Paste the Client Configuration**
 
+This format is specifically for the Outline client. You will need to replace the placeholder values with your own.
+
+**To make your connection more resilient against sophisticated network filtering**, we will also add a `prefix`. This small piece of data is added to the very beginning of your connection, making it look like standard, legitimate internet traffic (like a regular HTTPS connection). This helps it bypass automated systems that block unfamiliar-looking data, significantly increasing its reliability in harsh network environments.
+
+**Replace `your.domain.com` with your domain and `xYzc2vR+aB1eF5gHjK9LqQ==` with your secret.** Then, add the `prefix` line as shown below.
+
+```yaml
+transport:
+  $type: tcpudp
+
+  tcp:
+    $type: shadowsocks
+    endpoint:
+      $type: websocket
+      url: wss://your.domain.com/wss
+    # Add the prefix inside the tcp block to disguise TCP traffic
+    prefix: "\x16\x03\x03"
+    cipher: chacha20-ietf-poly1305
+    secret: xYzc2vR+aB1eF5gHjK9LqQ==
+
+  udp:
+    $type: shadowsocks
+    endpoint:
+      $type: websocket
+      url: wss://your.domain.com/wsp
+    # Also add the same prefix inside the udp block for consistency
+    prefix: "\x16\x03\x03"
+    cipher: chacha20-ietf-poly1305
+    secret: xYzc2vR+aB1eF5gHjK9LqQ==
+```
+
+Save and close the file. You should be able to access your configuration file at `https://your.domain.com/outline-config.yaml`.
+
+---
+
+#### **Choosing a Prefix**
+
+The `prefix` you choose should mimic a common protocol that is unlikely to be blocked. Here are some effective examples based on real-world research. You can replace the one in the example above with any of these.
+
+*   **Example 1: Mimic a TLS 1.2 Handshake (Highly Recommended)**
+    This prefix makes your connection look like the start of a standard HTTPS session. It is one of the most common and effective disguises.
     ```yaml
-    transport:
-      $type: tcpudp
-
-      tcp:
-        $type: shadowsocks
-        endpoint:
-          $type: websocket
-          url: wss://your.domain.com/wss
-        cipher: chacha20-ietf-poly1305
-        secret: xYzc2vR+aB1eF5gHjK9LqQ==
-
-      udp:
-        $type: shadowsocks
-        endpoint:
-          $type: websocket
-          url: wss://your.domain.com/wsp
-        cipher: chacha20-ietf-poly1305
-        secret: xYzc2vR+aB1eF5gHjK9LqQ==
+    prefix: "\x16\x03\x03"
     ```
-    Save and close the file. You should be able to access your configuration file at `https://your.domain.com/outline-config.yaml`.
+
+*   **Example 2: Mimic an HTTP POST Request**
+    This makes your connection look like data being sent to a web server. It is simple and widely recognized as legitimate traffic. Note the space at the end.
+    ```yaml
+    prefix: "POST "
+    ```
+
+*   **Example 3: Mimic a TLS 1.0/1.1 Handshake**
+    Slightly older but still very common on the internet.
+    ```yaml
+    prefix: "\x16\x03\x01"
+    ```
+
+By adding one of these prefixes, your Outline setup will be significantly more robust and less likely to be detected or blocked.
 
 4.  **Import into Outline Client**:
     *   Open your Outline client.
@@ -253,3 +289,68 @@ If you prefer not to host this file on your Outline server, you can use any serv
     *   The client will fetch the file and configure the server automatically.
 
 Congratulations! You have successfully deployed a secure and robust Outline server using WebSocket obfuscation through an Nginx reverse proxy.
+
+5.  **Optional Step: Optimize Network with TCP BBR**
+
+For users connecting from regions with high latency and network congestion, enabling Google's BBR congestion control algorithm on your server can significantly improve throughput and connection stability.
+
+Traditional algorithms often react to packet loss by drastically reducing speed. BBR is smarter; it actively models the network's actual bandwidth and latency to maintain a higher speed, even on less-than-perfect international links.
+
+Modern Debian systems (10, 11, 12) come with a kernel that supports BBR out of the box. Enabling it is safe and straightforward.
+
+#### **Prerequisite: Check Your Kernel Version**
+
+First, verify that your Linux kernel is version 4.19 or higher, which has BBR built-in.
+```bash
+uname -r
+```
+If you see a version like `5.10.0-23-amd64` or anything higher than `4.19`, you are ready to proceed.
+
+#### **Step 1: Enable BBR in System Configuration**
+
+We need to edit the system's core configuration file to tell the kernel to use BBR.
+
+Open the `sysctl.conf` file with a text editor:
+```bash
+sudo nano /etc/sysctl.conf
+```
+
+Scroll to the bottom of the file and add the following two lines:
+```
+# Enable BBR congestion control
+net.core.default_qdisc=fq
+net.ipv4.tcp_congestion_control=bbr
+```
+*   `net.core.default_qdisc=fq`: Enables the FQ (Fair Queuing) packet scheduler, which is recommended for BBR to work optimally.
+*   `net.ipv4.tcp_congestion_control=bbr`: Sets the default TCP congestion control algorithm to BBR.
+
+Save and close the file by pressing `Ctrl+X`, then `Y`, then `Enter`.
+
+#### **Step 2: Apply the New Configuration**
+
+After saving the file, you need to tell the system to load these new settings without rebooting.
+```bash
+sudo sysctl -p
+```
+You should see the two lines you just added printed back to the console, confirming they have been applied.
+
+#### **Step 3: Verify that BBR is Running**
+
+Now, let's verify that BBR is indeed the active congestion control algorithm.
+
+Run this command:
+```bash
+sysctl net.ipv4.tcp_congestion_control
+```
+The expected output should be:
+```
+net.ipv4.tcp_congestion_control = bbr
+```
+
+You can also perform a second check to see if the BBR kernel module is loaded:
+```bash
+lsmod | grep bbr
+```
+If you see a line containing `tcp_bbr`, it means the module is active.
+
+That's it! Your server is now using BBR, which should provide a faster and more stable connection experience for your users, especially over long-distance, congested network paths.
