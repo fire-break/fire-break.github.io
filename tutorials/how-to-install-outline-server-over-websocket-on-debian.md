@@ -1,3 +1,8 @@
+---
+title: "How to Install Outline Server with WebSocket and Nginx on Debia"
+layout: default 
+---
+
 ### **How to Install Outline Server with WebSocket and Nginx on Debian**
 
 This tutorial will guide you through setting up the `outline-ss-server` to listen for WebSocket connections on a private port and using Nginx to proxy public traffic from port 443 to the service. This setup enhances security and allows you to run other web services on the same server.
