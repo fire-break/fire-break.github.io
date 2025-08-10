@@ -102,7 +102,8 @@ We need a `config.yaml` file to tell the server how to listen and what keys to u
             cipher: chacha20-ietf-poly1305
             # !! IMPORTANT: Replace this with the secret you generated !!
             secret: xYzc2vR+aB1eF5gHjK9LqQ==
-    ```    Press `Ctrl+X`, then `Y`, then `Enter` to save and exit.
+    ```
+    Press `Ctrl+X`, then `Y`, then `Enter` to save and exit.
 
 ---
 
@@ -151,7 +152,8 @@ To ensure the server runs reliably in the background and starts automatically on
 4.  **Check the Service Status** (Recommended):
     ```bash
     sudo systemctl status outline-ss-server
-    ```    You should see a green `active (running)` status. Press `Q` to exit.
+    ```
+    You should see a green `active (running)` status. Press `Q` to exit.
 
 ---
 
