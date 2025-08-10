@@ -354,3 +354,92 @@ lsmod | grep bbr
 If you see a line containing `tcp_bbr`, it means the module is active.
 
 That's it! Your server is now using BBR, which should provide a faster and more stable connection experience for your users, especially over long-distance, congested network paths.
+
+---
+
+### **Bonus: Troubleshooting Common Connection Issues**
+
+If you've followed all the steps but find that your client cannot connect to the server, don't worry. The issue is almost always a small typo or mismatch in the configuration files. Here are the most common problems and how to fix them.
+
+The golden rule of troubleshooting is to **check the logs**. These files will tell you exactly what's going wrong.
+
+*   **Check Nginx logs**: `sudo journalctl -u nginx -f`
+*   **Check Outline server logs**: `sudo journalctl -u outline-ss-server -f`
+
+Press `Ctrl+C` to stop viewing the logs. Look for any lines that say `[error]` or `[emerg]`.
+
+#### **Problem 1: Path Mismatch**
+
+This is the most common error. The path in your Nginx configuration must **exactly match** the path in your `outline-ss-server`'s `config.yaml`.
+
+*   **Symptoms**: Your client will immediately fail to connect. In the Nginx access log (`/var/log/nginx/access.log`), you might see `404 Not Found` errors for your WebSocket path.
+
+*   **How to Fix**:
+    1.  **Check your Outline config**:
+        ```bash
+        sudo nano /etc/outline-ss-server/config.yaml
+        ```
+        Look at the `path:` values. For example: `path: "/wss"`.
+
+    2.  **Check your Nginx config**:
+        ```bash
+        sudo nano /etc/nginx/sites-available/default
+        ```
+        Look at the `location` block. If your `config.yaml` uses `/wss-outline`, your Nginx location must also match it, for example: `location ~ ^/(wss|wsp)$ { ... }`.
+
+    3.  **Ensure they are identical.** An exmaple would be you entered `path: "/ws"` in Outline config instead of `path: "/wss"`. Double check to ensure they are identical. Even a missing slash or a typo will cause it to fail. After fixing, restart both services:
+        ```bash
+        sudo systemctl restart outline-ss-server
+        sudo systemctl restart nginx
+        ```
+
+#### **Problem 2: Port Mismatch**
+
+This is the second most common error. The port Nginx proxies to must be the same one your `outline-ss-server` is listening on.
+
+*   **Symptoms**: The client will time out. In the Nginx error log (`/var/log/nginx/error.log`), you will see errors like `connect() failed (111: Connection refused) while connecting to upstream`. This means Nginx is trying to forward the traffic, but no service is listening at the target address.
+
+*   **How to Fix**:
+    1.  **Check your Outline config**:
+        ```bash
+        sudo nano /etc/outline-ss-server/config.yaml
+        ```
+        Look at the `listen:` value. For example: `listen: - "127.0.0.1:10000"`.
+
+    2.  **Check your Nginx config**:
+        ```bash
+        sudo nano /etc/nginx/sites-available/default
+        ```
+        Look at the `proxy_pass` directive inside your WebSocket location block. It must point to the same address and port: `proxy_pass http://127.0.0.1:10000;`.
+
+    3.  **Ensure they are identical.** An example would be you entered `443` as the port number in your Outline config but `10000` in Nginx config. Make sure to modify the port numbers in config files to make them identical. After fixing, restart Nginx: `sudo systemctl restart nginx`.
+
+#### **Problem 3: Firewall is Blocking the Port**
+
+If you are using a firewall on your server (like `ufw`), you must explicitly allow traffic on port 443.
+
+*   **Symptoms**: The client cannot connect at all. The connection attempt doesn't even seem to reach Nginx.
+
+*   **How to Fix** (if using `ufw`):
+    1.  **Allow HTTPS traffic**:
+        ```bash
+        sudo ufw allow 'Nginx Full'
+        # Or more specifically:
+        sudo ufw allow 443/tcp
+        ```
+    2.  **Check the firewall status**:
+        ```bash
+        sudo ufw status
+        ```
+        Ensure that port 443 is listed as `ALLOW`.
+
+#### **Problem 4: Incorrect Secret or Client Configuration**
+
+A simple copy-paste error in the client's YAML configuration file can also cause issues.
+
+*   **Symptoms**: The client might connect but immediately disconnect, or it might show an authentication error.
+
+*   **How to Fix**:
+    1.  **Double-check the secret**: Ensure the `secret:` value in your server's `config.yaml` is the exact same one used in the client's `outline-config.yaml`.
+    2.  **Double-check the domain**: Make sure the `url:` in the client's config (`wss://your.domain.com/wss`) points to the correct domain name that you have configured in Nginx and CloudFront/your DNS.
+    3.  **Double-check the prefix**: If you added a `prefix`, ensure it's correctly formatted and identical in both the `tcp` and `udp` sections of the client YAML file.
