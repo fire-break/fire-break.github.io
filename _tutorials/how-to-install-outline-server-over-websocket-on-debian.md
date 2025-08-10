@@ -223,11 +223,11 @@ If you prefer not to host this file on your Outline server, you can use any serv
 
 2. **Paste the Client Configuration**
 
-This format is specifically for the Outline client. You will need to replace the placeholder values with your own.
+    This format is specifically for the Outline client. You will need to replace the placeholder values with your own.
 
-**To make your connection more resilient against sophisticated network filtering**, we will also add a `prefix`. This small piece of data is added to the very beginning of your connection, making it look like standard, legitimate internet traffic (like a regular HTTPS connection). This helps it bypass automated systems that block unfamiliar-looking data, significantly increasing its reliability in harsh network environments.
+    **To make your connection more resilient against sophisticated network filtering**, we will also add a `prefix`. This small piece of data is added to the very beginning of your connection, making it look like standard, legitimate internet traffic (like a regular HTTPS connection). This helps it bypass automated systems that block unfamiliar-looking data, significantly increasing its reliability in harsh network environments.
 
-**Replace `your.domain.com` with your domain and `xYzc2vR+aB1eF5gHjK9LqQ==` with your secret.** Then, add the `prefix` line as shown below.
+    **Replace `your.domain.com` with your domain and `xYzc2vR+aB1eF5gHjK9LqQ==` with your secret.** Then, add the `prefix` line as shown below.
 
 ```yaml
 transport:
