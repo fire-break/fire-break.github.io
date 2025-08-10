@@ -229,32 +229,32 @@ If you prefer not to host this file on your Outline server, you can use any serv
 
     **Replace `your.domain.com` with your domain and `xYzc2vR+aB1eF5gHjK9LqQ==` with your secret.** Then, add the `prefix` line as shown below.
 
-```yaml
-transport:
-  $type: tcpudp
+    ```yaml
+    transport:
+      $type: tcpudp
 
-  tcp:
-    $type: shadowsocks
-    endpoint:
-      $type: websocket
-      url: wss://your.domain.com/wss
-    # Add the prefix inside the tcp block to disguise TCP traffic
-    prefix: "\x16\x03\x03"
-    cipher: chacha20-ietf-poly1305
-    secret: xYzc2vR+aB1eF5gHjK9LqQ==
+      tcp:
+        $type: shadowsocks
+        endpoint:
+          $type: websocket
+          url: wss://your.domain.com/wss
+        # Add the prefix inside the tcp block to disguise TCP traffic
+        prefix: "\x16\x03\x03"
+        cipher: chacha20-ietf-poly1305
+        secret: xYzc2vR+aB1eF5gHjK9LqQ==
 
-  udp:
-    $type: shadowsocks
-    endpoint:
-      $type: websocket
-      url: wss://your.domain.com/wsp
-    # Also add the same prefix inside the udp block for consistency
-    prefix: "\x16\x03\x03"
-    cipher: chacha20-ietf-poly1305
-    secret: xYzc2vR+aB1eF5gHjK9LqQ==
-```
+      udp:
+        $type: shadowsocks
+        endpoint:
+          $type: websocket
+          url: wss://your.domain.com/wsp
+        # Also add the same prefix inside the udp block for consistency
+        prefix: "\x16\x03\x03"
+        cipher: chacha20-ietf-poly1305
+        secret: xYzc2vR+aB1eF5gHjK9LqQ==
+    ```
 
-Save and close the file. You should be able to access your configuration file at `https://your.domain.com/outline-config.yaml`.
+    Save and close the file. You should be able to access your configuration file at `https://your.domain.com/outline-config.yaml`.
 
 ---
 
