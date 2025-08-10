@@ -278,9 +278,9 @@ If you prefer not to host this file on your Outline server, you can use any serv
    
     **Why does this work?**
     Advanced filtering systems often avoid blocking traffic that looks like standard TLS (the protocol that secures HTTPS). By adding one of these 3-byte prefixes, you make the start of your connection data identical to a legitimate TLS connection, causing it to be "exempted" from further inspection. Using a variety of prefixes can also help prevent your traffic from standing out.
-
     </details>
 
+    
     **Replace `your.domain.com` with your domain and `xYzc2vR+aB1eF5gHjK9LqQ==` with your secret.** Then, add the `prefix` line as shown below.
 
     ```yaml
