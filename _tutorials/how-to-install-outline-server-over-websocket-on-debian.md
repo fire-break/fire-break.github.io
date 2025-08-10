@@ -413,7 +413,7 @@ This is the most common error. The path in your Nginx configuration must **exact
         ```bash
         sudo nano /etc/nginx/sites-available/default
         ```
-        Look at the `location` block. If your `config.yaml` uses `/wss-outline`, your Nginx location must also match it, for example: `location ~ ^/(wss|wsp)$ { ... }`.
+        Look at the `location` block. If your `config.yaml` uses `/wss`, your Nginx location must also match it, for example: `location ~ ^/(wss|wsp)$ { ... }`.
 
     3.  **Ensure they are identical.** An exmaple would be you entered `path: "/ws"` in Outline config instead of `path: "/wss"`. Double check to ensure they are identical. Even a missing slash or a typo will cause it to fail. After fixing, restart both services:
         ```bash
