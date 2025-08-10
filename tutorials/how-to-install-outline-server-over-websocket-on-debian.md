@@ -73,7 +73,8 @@ We need a `config.yaml` file to tell the server how to listen and what keys to u
     Use a text editor like `nano` to create the configuration file.
     ```bash
     sudo nano /etc/outline-ss-server/config.yaml
-    ```    Paste the following content into the file. **Remember to replace the `secret` value with the one you generated.**
+    ```
+    Paste the following content into the file. **Remember to replace the `secret` value with the one you generated.**
 
     ```yaml
     # /etc/outline-ss-server/config.yaml
