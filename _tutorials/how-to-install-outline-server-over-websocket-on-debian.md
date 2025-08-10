@@ -221,7 +221,7 @@ If you prefer not to host this file on your Outline server, you can use any serv
     sudo nano /var/www/html/outline-config.yaml
     ```
 
-**2. Paste the Client Configuration**
+2. **Paste the Client Configuration**
 
 This format is specifically for the Outline client. You will need to replace the placeholder values with your own.
 
