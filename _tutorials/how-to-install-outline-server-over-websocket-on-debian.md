@@ -250,7 +250,7 @@ If you prefer not to host this file on your Outline server, you can use any serv
 
     Save and close the file. You should be able to access your configuration file at `https://your.domain.com/outline-config.yaml`.
 
-   **Bonus**: You can also add prefix in the Outline client configuration file to make the VPN traffic look like standard internet traffic. Read [this tutorial](/tutorials/how-to-add-prefix-in-outline-configuration.html)
+   **Bonus**: You can also add prefix in the Outline client configuration file to make the VPN traffic look like standard internet traffic. Read [this tutorial](/tutorials/how-to-add-prefix-in-outline-configuration.html).
 
 4.  **Import into Outline Client**:
     *   Open your Outline client.
