@@ -129,7 +129,7 @@ Start WireGuard and enable it to run on boot:
 
 ```bash
 # Start WireGuard
-sudo wg-quick up wg0
+sudo systemctl start wg-quick@wg0
 
 # Enable automatic start on boot
 sudo systemctl enable wg-quick@wg0
