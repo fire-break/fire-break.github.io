@@ -242,7 +242,7 @@ If you prefer not to host this file on your Outline server, you can use any serv
 
     This Advanced TLS Prefix Reference Table provides the raw hexadecimal values, the format required for your YAML file (`YAML-encoded`), and the format required if you were adding it directly to an `ss://` link (`URL-encoded`).
 
-    ### TLS Handshake Record Type (`0x16`)
+    **TLS Handshake Record Type (`0x16`)**
 
     This is the most natural choice for a prefix, as a `ClientHello` handshake is the very first packet in a new TLS connection.
 
@@ -259,7 +259,7 @@ If you prefer not to host this file on your Outline server, you can use any serv
     | Permitted Future/Undefined Version 5 | `16 03 08` | `"\x16\x03\x08"` | `%16%03%08` |
     | Permitted Future/Undefined Version 6 | `16 03 09` | `"\x16\x03\x09"` | `%16%03%09` |
 
-    ### TLS Application Data Record Type (`0x17`)
+    **TLS Application Data Record Type (`0x17`)**
 
     Using this type is also a valid strategy, though less common for the very first data packet of a connection.
 
